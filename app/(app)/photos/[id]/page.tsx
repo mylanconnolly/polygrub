@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { createClient } from "@/lib/supabase/server";
 import { PhotoDetail } from "@/components/photo-detail";
-import type { Photo } from "@/lib/types";
+import type { Photo, PhotoIngredient } from "@/lib/types";
 
 export default async function PhotoPage({
   params,
@@ -30,9 +30,16 @@ export default async function PhotoPage({
 
   const p = photo as Photo;
 
-  const { data: signedUrlData } = await supabase.storage
-    .from("photos")
-    .createSignedUrl(`${user.id}/${p.id}`, 3600);
+  const [{ data: signedUrlData }, { data: ingredients }] = await Promise.all([
+    supabase.storage.from("photos").createSignedUrl(`${user.id}/${p.id}`, 3600),
+    supabase
+      .from("photo_ingredients")
+      .select(
+        "confidence, description, ingredient:ingredients(id, name, category:categories(id, name, color))",
+      )
+      .eq("photo_id", id)
+      .eq("user_id", user.id),
+  ]);
 
   const imageUrl = signedUrlData?.signedUrl ?? "";
 
@@ -47,7 +54,11 @@ export default async function PhotoPage({
       </Link>
 
       <div className="mt-4">
-        <PhotoDetail photo={p} imageUrl={imageUrl} />
+        <PhotoDetail
+          photo={p}
+          imageUrl={imageUrl}
+          ingredients={(ingredients as PhotoIngredient[]) ?? []}
+        />
       </div>
     </div>
   );

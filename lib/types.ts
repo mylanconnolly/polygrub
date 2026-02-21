@@ -56,6 +56,20 @@ export type Photo = {
   updated_at: string;
 };
 
+export type PhotoIngredient = {
+  confidence: number;
+  description: string | null;
+  ingredient: {
+    id: string;
+    name: string;
+    category: {
+      id: string;
+      name: string;
+      color: CategoryColor;
+    };
+  };
+};
+
 export type ActionResult = {
   error?: string;
   success?: string;

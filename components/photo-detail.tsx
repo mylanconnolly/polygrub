@@ -5,19 +5,91 @@ import Image from "next/image";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Dialog } from "@/components/dialog";
 import { StatusBadge } from "@/components/photo-grid";
+import { ColorDot } from "@/components/color-dot";
 import { deletePhoto } from "@/lib/actions/photos";
-import type { Photo } from "@/lib/types";
+import type { Photo, PhotoIngredient } from "@/lib/types";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleString();
 }
 
+function groupByCategory(ingredients: PhotoIngredient[]) {
+  const groups = new Map<
+    string,
+    { category: PhotoIngredient["ingredient"]["category"]; items: PhotoIngredient[] }
+  >();
+  for (const pi of ingredients) {
+    const cat = pi.ingredient.category;
+    const existing = groups.get(cat.id);
+    if (existing) {
+      existing.items.push(pi);
+    } else {
+      groups.set(cat.id, { category: cat, items: [pi] });
+    }
+  }
+  return Array.from(groups.values());
+}
+
+function IngredientsSection({ ingredients }: { ingredients: PhotoIngredient[] }) {
+  if (ingredients.length === 0) {
+    return (
+      <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-700 dark:bg-zinc-800/50">
+        <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          No tracked ingredients found
+        </p>
+        <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+          None of the ingredients in this photo matched your tracked list.
+        </p>
+      </div>
+    );
+  }
+
+  const groups = groupByCategory(ingredients);
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+        Identified Ingredients
+      </h3>
+      {groups.map(({ category, items }) => (
+        <div key={category.id}>
+          <div className="flex items-center gap-2">
+            <ColorDot color={category.color} />
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+              {category.name}
+            </span>
+          </div>
+          <ul className="mt-1.5 space-y-1 pl-5">
+            {items.map((pi) => (
+              <li key={pi.ingredient.id} className="text-sm">
+                <span className="text-zinc-900 dark:text-zinc-100">
+                  {pi.ingredient.name}
+                </span>
+                <span className="ml-2 text-zinc-500 dark:text-zinc-400">
+                  {Math.round(pi.confidence * 100)}%
+                </span>
+                {pi.description && (
+                  <span className="ml-2 text-zinc-500 dark:text-zinc-400">
+                    — {pi.description}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function PhotoDetail({
   photo,
   imageUrl,
+  ingredients,
 }: {
   photo: Photo;
   imageUrl: string;
+  ingredients: PhotoIngredient[];
 }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [state, action, pending] = useActionState(deletePhoto, null);
@@ -71,6 +143,10 @@ export function PhotoDetail({
             </dd>
           </div>
         </dl>
+
+        {photo.status === "complete" && (
+          <IngredientsSection ingredients={ingredients} />
+        )}
       </div>
 
       <Dialog
