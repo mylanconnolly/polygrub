@@ -7,6 +7,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   CameraIcon,
+  PhotoIcon,
   Cog6ToothIcon,
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
@@ -14,6 +15,7 @@ import { signOut } from "@/lib/actions/auth";
 
 const navLinks = [
   { href: "/scan", label: "Scan", icon: CameraIcon },
+  { href: "/photos", label: "Photos", icon: PhotoIcon },
   { href: "/settings", label: "Settings", icon: Cog6ToothIcon },
 ];
 
