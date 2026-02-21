@@ -45,6 +45,17 @@ export type Ingredient = {
   updated_at: string;
 };
 
+export type PhotoStatus = "pending" | "processing" | "complete" | "error";
+
+export type Photo = {
+  id: string;
+  user_id: string;
+  filename: string;
+  status: PhotoStatus;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ActionResult = {
   error?: string;
   success?: string;
