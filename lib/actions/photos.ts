@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResult, Photo } from "@/lib/types";
 
@@ -75,5 +76,5 @@ export async function deletePhoto(
   if (dbError) return { error: dbError.message };
 
   revalidatePath("/photos");
-  return { success: "Photo deleted." };
+  redirect("/photos");
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useActionState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useActionState } from "react";
 import Image from "next/image";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Dialog } from "@/components/dialog";
@@ -20,15 +19,8 @@ export function PhotoDetail({
   photo: Photo;
   imageUrl: string;
 }) {
-  const router = useRouter();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [state, action, pending] = useActionState(deletePhoto, null);
-
-  useEffect(() => {
-    if (state?.success) {
-      router.push("/photos");
-    }
-  }, [state, router]);
 
   return (
     <div>
