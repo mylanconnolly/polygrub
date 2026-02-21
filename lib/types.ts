@@ -35,6 +35,16 @@ export type Category = {
   updated_at: string;
 };
 
+export type Ingredient = {
+  id: string;
+  category_id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ActionResult = {
   error?: string;
   success?: string;

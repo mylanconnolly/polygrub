@@ -6,8 +6,13 @@ export default async function SettingsPage() {
   const supabase = await createClient();
   const { data: categories } = await supabase
     .from("categories")
-    .select("*")
+    .select("*, ingredients(count)")
     .order("name");
+
+  const ingredientCounts: Record<string, number> = {};
+  for (const cat of categories ?? []) {
+    ingredientCounts[cat.id] = cat.ingredients?.[0]?.count ?? 0;
+  }
 
   return (
     <div>
@@ -18,6 +23,7 @@ export default async function SettingsPage() {
       <div className="mt-8">
         <CategoryManager
           initialCategories={(categories as Category[]) ?? []}
+          ingredientCounts={ingredientCounts}
         />
       </div>
     </div>
