@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "PolyGrub",
   description:
-    "Share photos of your favorite meals, discover new restaurants, and connect with fellow food lovers.",
+    "Snap a photo of any ingredient label and instantly spot allergens, dietary restrictions, and ingredients that matter to you.",
 };
 
 export default function RootLayout({
