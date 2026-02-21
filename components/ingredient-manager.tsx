@@ -14,6 +14,7 @@ import {
   deleteIngredient,
 } from "@/lib/actions/ingredients";
 import { Dialog } from "@/components/dialog";
+import { useRealtimeRefresh } from "@/hooks/use-realtime-refresh";
 import type { ActionResult, Ingredient } from "@/lib/types";
 
 type ModalState =
@@ -155,11 +156,17 @@ function DeleteConfirmation({
 
 export function IngredientManager({
   categoryId,
+  userId,
   initialIngredients,
 }: {
   categoryId: string;
+  userId: string;
   initialIngredients: Ingredient[];
 }) {
+  useRealtimeRefresh(`ingredients:${categoryId}`, [
+    { table: "ingredients", filter: `category_id=eq.${categoryId}` },
+  ]);
+
   const [modalState, setModalState] = useState<ModalState>(null);
   const closeModal = () => setModalState(null);
 

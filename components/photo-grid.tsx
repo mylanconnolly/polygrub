@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PhotoIcon } from "@heroicons/react/24/outline";
+import { useRealtimeRefresh } from "@/hooks/use-realtime-refresh";
 import type { PhotoStatus } from "@/lib/types";
 
 type PhotoItem = {
@@ -55,7 +56,11 @@ export function StatusBadge({ status }: { status: PhotoStatus }) {
   );
 }
 
-export function PhotoGrid({ photos }: { photos: PhotoItem[] }) {
+export function PhotoGrid({ photos, userId }: { photos: PhotoItem[]; userId: string }) {
+  useRealtimeRefresh(`photos:${userId}`, [
+    { table: "photos", filter: `user_id=eq.${userId}` },
+  ]);
+
   if (photos.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 py-16 dark:border-zinc-700">

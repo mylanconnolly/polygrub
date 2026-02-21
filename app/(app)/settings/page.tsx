@@ -1,9 +1,16 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CategoryManager } from "@/components/category-manager";
 import type { Category } from "@/lib/types";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/sign-in");
+
   const { data: categories } = await supabase
     .from("categories")
     .select("*, ingredients(count)")
@@ -24,6 +31,7 @@ export default async function SettingsPage() {
         <CategoryManager
           initialCategories={(categories as Category[]) ?? []}
           ingredientCounts={ingredientCounts}
+          userId={user.id}
         />
       </div>
     </div>

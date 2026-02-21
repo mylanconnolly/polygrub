@@ -59,6 +59,7 @@ export default async function CategoryPage({
       <div className="mt-8">
         <IngredientManager
           categoryId={cat.id}
+          userId={user.id}
           initialIngredients={(ingredients as Ingredient[]) ?? []}
         />
       </div>

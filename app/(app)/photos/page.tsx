@@ -42,7 +42,7 @@ export default async function PhotosPage() {
         View your uploaded ingredient label photos and their processing status.
       </p>
       <div className="mt-8">
-        <PhotoGrid photos={photosWithUrls} />
+        <PhotoGrid photos={photosWithUrls} userId={user.id} />
       </div>
     </div>
   );

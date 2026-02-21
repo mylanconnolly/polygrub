@@ -12,6 +12,7 @@ import {
 import { createCategory, updateCategory, deleteCategory } from "@/lib/actions/categories";
 import { ColorDot } from "@/components/color-dot";
 import { Dialog } from "@/components/dialog";
+import { useRealtimeRefresh } from "@/hooks/use-realtime-refresh";
 import {
   CATEGORY_COLORS,
   type ActionResult,
@@ -203,10 +204,17 @@ function DeleteConfirmation({
 export function CategoryManager({
   initialCategories,
   ingredientCounts,
+  userId,
 }: {
   initialCategories: Category[];
   ingredientCounts: Record<string, number>;
+  userId: string;
 }) {
+  useRealtimeRefresh(`categories:${userId}`, [
+    { table: "categories", filter: `user_id=eq.${userId}` },
+    { table: "ingredients", filter: `user_id=eq.${userId}` },
+  ]);
+
   const [modalState, setModalState] = useState<ModalState>(null);
   const closeModal = () => setModalState(null);
 

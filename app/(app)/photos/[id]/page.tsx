@@ -58,6 +58,7 @@ export default async function PhotoPage({
           photo={p}
           imageUrl={imageUrl}
           ingredients={(ingredients as PhotoIngredient[]) ?? []}
+          userId={user.id}
         />
       </div>
     </div>

@@ -78,3 +78,56 @@ export async function deletePhoto(
   revalidatePath("/photos");
   redirect("/photos");
 }
+
+export async function reanalyzePhoto(
+  _prevState: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
+  const id = formData.get("id") as string | null;
+
+  if (!id) return { error: "Photo ID is required." };
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return { error: "Not authenticated." };
+
+  const { data: photo } = await supabase
+    .from("photos")
+    .select("id")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!photo) return { error: "Photo not found." };
+
+  // Delete existing ingredient results
+  const { error: deleteError } = await supabase
+    .from("photo_ingredients")
+    .delete()
+    .eq("photo_id", id);
+
+  if (deleteError) return { error: deleteError.message };
+
+  // Reset photo status to pending
+  const { error: updateError } = await supabase
+    .from("photos")
+    .update({ status: "pending", analyzed_at: null, error_message: null })
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (updateError) return { error: updateError.message };
+
+  // Insert a new analysis job — the existing DB trigger fires the edge function
+  const { error: jobError } = await supabase
+    .from("analysis_jobs")
+    .insert({ photo_id: id, status: "pending" });
+
+  if (jobError) return { error: jobError.message };
+
+  revalidatePath("/photos");
+  revalidatePath(`/photos/${id}`);
+  return { success: "Reanalysis started." };
+}

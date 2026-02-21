@@ -2,11 +2,12 @@
 
 import { useState, useActionState } from "react";
 import Image from "next/image";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Dialog } from "@/components/dialog";
 import { StatusBadge } from "@/components/photo-grid";
 import { ColorDot } from "@/components/color-dot";
-import { deletePhoto } from "@/lib/actions/photos";
+import { useRealtimeRefresh } from "@/hooks/use-realtime-refresh";
+import { deletePhoto, reanalyzePhoto } from "@/lib/actions/photos";
 import type { Photo, PhotoIngredient } from "@/lib/types";
 
 function formatDate(dateStr: string) {
@@ -86,13 +87,22 @@ export function PhotoDetail({
   photo,
   imageUrl,
   ingredients,
+  userId,
 }: {
   photo: Photo;
   imageUrl: string;
   ingredients: PhotoIngredient[];
+  userId: string;
 }) {
+  useRealtimeRefresh(`photo-detail:${photo.id}`, [
+    { table: "photos", event: "UPDATE", filter: `id=eq.${photo.id}` },
+    { table: "photo_ingredients", event: "INSERT", filter: `photo_id=eq.${photo.id}` },
+  ]);
+
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [state, action, pending] = useActionState(deletePhoto, null);
+  const [reanalyzeState, reanalyzeAction, reanalyzePending] = useActionState(reanalyzePhoto, null);
+  const analysisInFlight = photo.status === "pending" || photo.status === "processing";
 
   return (
     <div>
@@ -119,14 +129,27 @@ export function PhotoDetail({
               <StatusBadge status={photo.status} />
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setConfirmOpen(true)}
-            className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
-          >
-            <TrashIcon className="h-4 w-4" />
-            Delete
-          </button>
+          <div className="flex items-center gap-2">
+            <form action={reanalyzeAction}>
+              <input type="hidden" name="id" value={photo.id} />
+              <button
+                type="submit"
+                disabled={reanalyzePending || analysisInFlight}
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 disabled:opacity-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                <ArrowPathIcon className={`h-4 w-4 ${reanalyzePending ? "animate-spin" : ""}`} />
+                {reanalyzePending ? "Reanalyzing..." : "Reanalyze"}
+              </button>
+            </form>
+            <button
+              type="button"
+              onClick={() => setConfirmOpen(true)}
+              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+            >
+              <TrashIcon className="h-4 w-4" />
+              Delete
+            </button>
+          </div>
         </div>
 
         <dl className="grid grid-cols-2 gap-4 text-sm">
@@ -144,8 +167,26 @@ export function PhotoDetail({
           </div>
         </dl>
 
+        {reanalyzeState?.error && (
+          <p className="text-sm text-red-600 dark:text-red-400">
+            {reanalyzeState.error}
+          </p>
+        )}
+
         {photo.status === "complete" && (
           <IngredientsSection ingredients={ingredients} />
+        )}
+
+        {photo.status === "error" && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800 dark:bg-red-900/20">
+            <p className="text-sm font-medium text-red-700 dark:text-red-300">
+              Analysis failed
+            </p>
+            <p className="mt-0.5 text-sm text-red-600 dark:text-red-400">
+              Something went wrong while analyzing this photo. You can try again
+              using the Reanalyze button above.
+            </p>
+          </div>
         )}
       </div>
 
