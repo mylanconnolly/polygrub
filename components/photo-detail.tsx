@@ -110,7 +110,7 @@ export function PhotoDetail({
         <div className="relative aspect-video bg-zinc-100 dark:bg-zinc-900">
           <Image
             src={imageUrl}
-            alt={photo.filename}
+            alt={`Ingredient label: ${photo.filename}`}
             fill
             className="object-contain"
             sizes="(max-width: 1024px) 100vw, 960px"
@@ -137,7 +137,7 @@ export function PhotoDetail({
                 disabled={reanalyzePending || analysisInFlight}
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 disabled:opacity-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
-                <ArrowPathIcon className={`h-4 w-4 ${reanalyzePending ? "animate-spin" : ""}`} />
+                <ArrowPathIcon aria-hidden="true" className={`h-4 w-4 ${reanalyzePending ? "animate-spin motion-reduce:animate-none" : ""}`} />
                 {reanalyzePending ? "Reanalyzing..." : "Reanalyze"}
               </button>
             </form>
@@ -146,7 +146,7 @@ export function PhotoDetail({
               onClick={() => setConfirmOpen(true)}
               className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
             >
-              <TrashIcon className="h-4 w-4" />
+              <TrashIcon className="h-4 w-4" aria-hidden="true" />
               Delete
             </button>
           </div>
@@ -167,18 +167,20 @@ export function PhotoDetail({
           </div>
         </dl>
 
-        {reanalyzeState?.error && (
-          <p className="text-sm text-red-600 dark:text-red-400">
-            {reanalyzeState.error}
-          </p>
-        )}
+        <div role="alert" aria-live="assertive">
+          {reanalyzeState?.error && (
+            <p className="text-sm text-red-600 dark:text-red-400">
+              {reanalyzeState.error}
+            </p>
+          )}
+        </div>
 
         {photo.status === "complete" && (
           <IngredientsSection ingredients={ingredients} />
         )}
 
         {photo.status === "error" && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800 dark:bg-red-900/20">
+          <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800 dark:bg-red-900/20">
             <p className="text-sm font-medium text-red-700 dark:text-red-300">
               Analysis failed
             </p>
@@ -202,11 +204,13 @@ export function PhotoDetail({
           </span>
           ? This action cannot be undone.
         </p>
-        {state?.error && (
-          <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-            {state.error}
-          </p>
-        )}
+        <div role="alert" aria-live="assertive">
+          {state?.error && (
+            <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+              {state.error}
+            </p>
+          )}
+        </div>
         <div className="mt-4 flex justify-end gap-3">
           <button
             type="button"

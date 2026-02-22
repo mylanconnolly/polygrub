@@ -63,11 +63,12 @@ export default async function Home() {
       </main>
 
       {/* Features */}
-      <section className="border-t border-zinc-200 bg-white px-4 py-20 dark:border-zinc-800 dark:bg-zinc-950">
+      <section aria-labelledby="features-heading" className="border-t border-zinc-200 bg-white px-4 py-20 dark:border-zinc-800 dark:bg-zinc-950">
+        <h2 id="features-heading" className="sr-only">Features</h2>
         <div className="mx-auto grid max-w-4xl gap-10 sm:grid-cols-3">
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-900/30">
-              <CameraIcon className="h-6 w-6 text-emerald-700 dark:text-emerald-400" />
+              <CameraIcon className="h-6 w-6 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
             </div>
             <h3 className="font-semibold">Snap a Label</h3>
             <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -77,7 +78,7 @@ export default async function Home() {
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 dark:bg-amber-900/30">
-              <ShieldExclamationIcon className="h-6 w-6 text-amber-700 dark:text-amber-400" />
+              <ShieldExclamationIcon className="h-6 w-6 text-amber-700 dark:text-amber-400" aria-hidden="true" />
             </div>
             <h3 className="font-semibold">Flag What Matters</h3>
             <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -87,7 +88,7 @@ export default async function Home() {
           </div>
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 dark:bg-sky-900/30">
-              <ClipboardDocumentListIcon className="h-6 w-6 text-sky-700 dark:text-sky-400" />
+              <ClipboardDocumentListIcon className="h-6 w-6 text-sky-700 dark:text-sky-400" aria-hidden="true" />
             </div>
             <h3 className="font-semibold">Build Your History</h3>
             <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
@@ -102,38 +103,38 @@ export default async function Home() {
       <section className="px-4 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight">How it works</h2>
-          <div className="mt-12 grid gap-8 text-left sm:grid-cols-3">
-            <div>
-              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+          <ol className="mt-12 grid gap-8 text-left sm:grid-cols-3">
+            <li>
+              <span aria-hidden="true" className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                 1
-              </div>
+              </span>
               <h3 className="mt-2 font-semibold">Set your profile</h3>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                 Choose ingredient categories you want to watch — dairy, nuts,
                 shellfish, soy, and more.
               </p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+            </li>
+            <li>
+              <span aria-hidden="true" className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                 2
-              </div>
+              </span>
               <h3 className="mt-2 font-semibold">Scan a label</h3>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                 Upload or photograph an ingredient label. PolyGrub extracts and
                 analyzes every ingredient.
               </p>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+            </li>
+            <li>
+              <span aria-hidden="true" className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                 3
-              </div>
+              </span>
               <h3 className="mt-2 font-semibold">Get your results</h3>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                 See flagged ingredients highlighted instantly — safe or not, at a
                 glance.
               </p>
-            </div>
-          </div>
+            </li>
+          </ol>
         </div>
       </section>
     </div>

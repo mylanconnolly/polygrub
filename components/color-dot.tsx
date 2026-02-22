@@ -28,6 +28,7 @@ const colorClasses: Record<CategoryColor, string> = {
 export function ColorDot({ color }: { color: CategoryColor }) {
   return (
     <span
+      aria-hidden="true"
       className={`inline-block h-3 w-3 shrink-0 rounded-full ${colorClasses[color]}`}
     />
   );

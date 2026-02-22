@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PhotoUploader } from "@/components/photo-uploader";
+
+export const metadata: Metadata = { title: "Scan" };
 
 export default async function ScanPage() {
   const supabase = await createClient();

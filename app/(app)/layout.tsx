@@ -20,8 +20,13 @@ export default async function AppLayout({
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <Navbar email={user.email!} />
-      <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+      <main id="main-content" className="mx-auto max-w-5xl px-4 py-8">
+        {children}
+      </main>
     </div>
   );
 }

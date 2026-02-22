@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useId } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export function Dialog({
@@ -15,7 +15,7 @@ export function Dialog({
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const titleId = "dialog-title";
+  const titleId = useId();
 
   useEffect(() => {
     const dialog = ref.current;
@@ -55,7 +55,7 @@ export function Dialog({
           onClick={onClose}
           className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
         >
-          <XMarkIcon className="h-5 w-5" />
+          <XMarkIcon className="h-5 w-5" aria-hidden="true" />
           <span className="sr-only">Close</span>
         </button>
       </div>

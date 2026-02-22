@@ -97,6 +97,8 @@ export function PhotoUploader({ userId }: { userId: string }) {
   return (
     <div className="space-y-6">
       <div
+        role="region"
+        aria-label="Photo upload area"
         onDragEnter={(e) => {
           e.preventDefault();
           setDragOver(true);
@@ -116,7 +118,7 @@ export function PhotoUploader({ userId }: { userId: string }) {
             : "border-zinc-300 dark:border-zinc-700"
         }`}
       >
-        <ArrowUpTrayIcon className="mx-auto h-10 w-10 text-zinc-400" />
+        <ArrowUpTrayIcon className="mx-auto h-10 w-10 text-zinc-400" aria-hidden="true" />
         <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
           Drag and drop photos here, or use the buttons below
         </p>
@@ -127,7 +129,7 @@ export function PhotoUploader({ userId }: { userId: string }) {
             onClick={() => cameraRef.current?.click()}
             className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500"
           >
-            <CameraIcon className="h-5 w-5" />
+            <CameraIcon className="h-5 w-5" aria-hidden="true" />
             Camera
           </button>
           <button
@@ -135,7 +137,7 @@ export function PhotoUploader({ userId }: { userId: string }) {
             onClick={() => fileRef.current?.click()}
             className="inline-flex items-center gap-2 rounded-md bg-zinc-800 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-700 dark:hover:bg-zinc-600"
           >
-            <PhotoIcon className="h-5 w-5" />
+            <PhotoIcon className="h-5 w-5" aria-hidden="true" />
             Choose Files
           </button>
         </div>
@@ -165,7 +167,7 @@ export function PhotoUploader({ userId }: { userId: string }) {
       </div>
 
       {uploads.length > 0 && (
-        <ul className="space-y-3">
+        <ul aria-live="polite" className="space-y-3">
           {uploads.map((upload) => (
             <li
               key={upload.id}
@@ -188,14 +190,18 @@ export function PhotoUploader({ userId }: { userId: string }) {
                 </p>
               </div>
               {upload.status === "done" && (
-                <CheckCircleIcon className="h-5 w-5 shrink-0 text-emerald-500" />
+                <CheckCircleIcon className="h-5 w-5 shrink-0 text-emerald-500" aria-hidden="true" />
               )}
               {upload.status === "error" && (
-                <ExclamationCircleIcon className="h-5 w-5 shrink-0 text-red-500" />
+                <ExclamationCircleIcon className="h-5 w-5 shrink-0 text-red-500" aria-hidden="true" />
               )}
               {(upload.status === "resizing" ||
                 upload.status === "uploading") && (
-                <div className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-zinc-300 border-t-emerald-500" />
+                <div
+                  role="status"
+                  aria-label="Uploading"
+                  className="h-5 w-5 shrink-0 animate-spin motion-reduce:animate-none rounded-full border-2 border-zinc-300 border-t-emerald-500"
+                />
               )}
             </li>
           ))}

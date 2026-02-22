@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { signUp } from "@/lib/actions/auth";
+
+export const metadata: Metadata = { title: "Sign Up" };
 
 export default async function SignUpPage({
   searchParams,
@@ -9,7 +12,7 @@ export default async function SignUpPage({
   const { error, success } = await searchParams;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
+    <main className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black">
       <div className="w-full max-w-sm space-y-6 px-4">
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold tracking-tight">
@@ -19,18 +22,18 @@ export default async function SignUpPage({
         </div>
 
         {error && (
-          <p className="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+          <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
             {error}
           </p>
         )}
 
         {success && (
-          <p className="rounded-md bg-green-50 p-3 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-400">
+          <p role="status" className="rounded-md bg-green-50 p-3 text-sm text-green-700 dark:bg-green-900/20 dark:text-green-400">
             {success}
           </p>
         )}
 
-        <form action={signUp} className="space-y-4">
+        <form action={signUp} aria-label="Sign up" className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
               Email
@@ -41,7 +44,7 @@ export default async function SignUpPage({
               type="email"
               required
               autoComplete="email"
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
+              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
             />
           </div>
           <div>
@@ -54,7 +57,7 @@ export default async function SignUpPage({
               type="password"
               required
               autoComplete="new-password"
-              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
+              className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
             />
           </div>
           <button
@@ -75,6 +78,6 @@ export default async function SignUpPage({
           </Link>
         </p>
       </div>
-    </div>
+    </main>
   );
 }

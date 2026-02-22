@@ -50,7 +50,7 @@ export function StatusBadge({ status }: { status: PhotoStatus }) {
     <span
       className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${config.bg} ${config.text}`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${config.dot}`} />
+      <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${config.dot}`} />
       {config.label}
     </span>
   );
@@ -64,7 +64,7 @@ export function PhotoGrid({ photos, userId }: { photos: PhotoItem[]; userId: str
   if (photos.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 py-16 dark:border-zinc-700">
-        <PhotoIcon className="h-10 w-10 text-zinc-400" />
+        <PhotoIcon className="h-10 w-10 text-zinc-400" aria-hidden="true" />
         <p className="mt-3 text-sm font-medium text-zinc-600 dark:text-zinc-400">
           No photos yet
         </p>
@@ -81,14 +81,14 @@ export function PhotoGrid({ photos, userId }: { photos: PhotoItem[]; userId: str
         <Link
           key={photo.id}
           href={`/photos/${photo.id}`}
-          className="group overflow-hidden rounded-lg border border-zinc-200 transition hover:border-zinc-300 hover:shadow-sm dark:border-zinc-800 dark:hover:border-zinc-700"
+          className="group overflow-hidden rounded-lg border border-zinc-200 transition hover:border-zinc-300 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-zinc-800 dark:hover:border-zinc-700 dark:focus-visible:ring-offset-black"
         >
           <div className="relative aspect-square bg-zinc-100 dark:bg-zinc-900">
             <Image
               src={photo.imageUrl}
-              alt={photo.filename}
+              alt={`Ingredient label: ${photo.filename}`}
               fill
-              className="object-cover transition group-hover:scale-105"
+              className="object-cover transition group-hover:scale-105 motion-reduce:transform-none"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </div>

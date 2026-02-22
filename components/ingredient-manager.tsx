@@ -45,9 +45,11 @@ function IngredientForm({
       <input type="hidden" name="category_id" value={categoryId} />
       {ingredient && <input type="hidden" name="id" value={ingredient.id} />}
 
-      {state?.error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
-      )}
+      <div role="alert" aria-live="assertive">
+        {state?.error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
+        )}
+      </div>
 
       <div>
         <label htmlFor="ing-name" className="block text-sm font-medium">
@@ -60,7 +62,7 @@ function IngredientForm({
           required
           autoFocus
           defaultValue={ingredient?.name}
-          className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
+          className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
         />
       </div>
 
@@ -74,7 +76,7 @@ function IngredientForm({
           type="text"
           required
           defaultValue={ingredient?.description}
-          className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
+          className="mt-1 block w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900"
         />
       </div>
 
@@ -84,7 +86,7 @@ function IngredientForm({
           disabled={pending}
           className="flex items-center gap-1.5 rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-500 disabled:opacity-50 dark:bg-emerald-500 dark:hover:bg-emerald-400"
         >
-          <CheckIcon className="h-4 w-4" />
+          <CheckIcon className="h-4 w-4" aria-hidden="true" />
           {pending ? "Saving..." : ingredient ? "Update" : "Create"}
         </button>
         <button
@@ -92,7 +94,7 @@ function IngredientForm({
           onClick={onClose}
           className="flex items-center gap-1.5 rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
         >
-          <XMarkIcon className="h-4 w-4" />
+          <XMarkIcon className="h-4 w-4" aria-hidden="true" />
           Cancel
         </button>
       </div>
@@ -120,9 +122,11 @@ function DeleteConfirmation({
       <input type="hidden" name="id" value={ingredient.id} />
       <input type="hidden" name="category_id" value={categoryId} />
 
-      {state?.error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
-      )}
+      <div role="alert" aria-live="assertive">
+        {state?.error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{state.error}</p>
+        )}
+      </div>
 
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         Are you sure you want to delete{" "}
@@ -139,7 +143,7 @@ function DeleteConfirmation({
           autoFocus
           className="flex items-center gap-1.5 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-500 disabled:opacity-50"
         >
-          <TrashIcon className="h-4 w-4" />
+          <TrashIcon className="h-4 w-4" aria-hidden="true" />
           {pending ? "Deleting..." : "Delete"}
         </button>
         <button
@@ -179,7 +183,7 @@ export function IngredientManager({
           onClick={() => setModalState({ mode: "create" })}
           className="flex items-center gap-1.5 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400"
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon className="h-4 w-4" aria-hidden="true" />
           Add ingredient
         </button>
       </div>
@@ -189,9 +193,9 @@ export function IngredientManager({
           No ingredients yet. Add one to start flagging it on labels.
         </p>
       ) : (
-        <div className="divide-y divide-zinc-200 rounded-lg border border-zinc-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-950">
+        <ul className="divide-y divide-zinc-200 rounded-lg border border-zinc-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-950">
           {initialIngredients.map((ing) => (
-            <div
+            <li
               key={ing.id}
               className="flex items-center justify-between px-4 py-3"
             >
@@ -208,9 +212,9 @@ export function IngredientManager({
                     setModalState({ mode: "edit", ingredient: ing })
                   }
                   className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
-                  title="Edit"
+                  aria-label={`Edit ${ing.name}`}
                 >
-                  <PencilSquareIcon className="h-4 w-4" />
+                  <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
                 </button>
                 <button
                   type="button"
@@ -218,14 +222,14 @@ export function IngredientManager({
                     setModalState({ mode: "delete", ingredient: ing })
                   }
                   className="rounded-md p-1.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-red-600 dark:hover:bg-zinc-900 dark:hover:text-red-400"
-                  title="Delete"
+                  aria-label={`Delete ${ing.name}`}
                 >
-                  <TrashIcon className="h-4 w-4" />
+                  <TrashIcon className="h-4 w-4" aria-hidden="true" />
                 </button>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       <Dialog

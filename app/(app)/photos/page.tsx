@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PhotoGrid } from "@/components/photo-grid";
 import type { Photo } from "@/lib/types";
+
+export const metadata: Metadata = { title: "Photos" };
 
 export default async function PhotosPage() {
   const supabase = await createClient();

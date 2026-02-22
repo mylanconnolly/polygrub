@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PolyGrub",
+  title: {
+    default: "PolyGrub",
+    template: "%s | PolyGrub",
+  },
   description:
     "Snap a photo of any ingredient label and instantly spot allergens, dietary restrictions, and ingredients that matter to you.",
 };
