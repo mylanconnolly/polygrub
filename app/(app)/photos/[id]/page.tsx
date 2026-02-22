@@ -38,7 +38,8 @@ export default async function PhotoPage({
         "confidence, description, ingredient:ingredients(id, name, category:categories(id, name, color))",
       )
       .eq("photo_id", id)
-      .eq("user_id", user.id),
+      .eq("user_id", user.id)
+      .returns<PhotoIngredient[]>(),
   ]);
 
   const imageUrl = signedUrlData?.signedUrl ?? "";
@@ -57,7 +58,7 @@ export default async function PhotoPage({
         <PhotoDetail
           photo={p}
           imageUrl={imageUrl}
-          ingredients={(ingredients as PhotoIngredient[]) ?? []}
+          ingredients={ingredients ?? []}
           userId={user.id}
         />
       </div>
