@@ -114,18 +114,11 @@ export async function reanalyzePhoto(
   // Reset photo status to pending
   const { error: updateError } = await supabase
     .from("photos")
-    .update({ status: "pending", analyzed_at: null, error_message: null })
+    .update({ status: "pending", complete_at: null, error_at: null, processing_at: null })
     .eq("id", id)
     .eq("user_id", user.id);
 
   if (updateError) return { error: updateError.message };
-
-  // Insert a new analysis job — the existing DB trigger fires the edge function
-  const { error: jobError } = await supabase
-    .from("analysis_jobs")
-    .insert({ photo_id: id, status: "pending" });
-
-  if (jobError) return { error: jobError.message };
 
   revalidatePath("/photos");
   revalidatePath(`/photos/${id}`);
